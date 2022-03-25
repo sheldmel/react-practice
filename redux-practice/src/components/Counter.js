@@ -1,26 +1,50 @@
 import { useSelector, useDispatch } from "react-redux";
 
+//-------REDUX TOOLKIT -------
+import { counterActions } from "../store/counter";
 import classes from "./Counter.module.css";
 
 const Counter = () => {
-  const counter = useSelector((state) => state.counter);
-  const toggle = useSelector((state) => state.visibility);
+  //------- DEFAULT REDUX ------- 
+  // const counter = useSelector((state) => state.counter);
+  // const toggle = useSelector((state) => state.visibility);
+
+  //-------REDUX TOOLKIT -------
+  const counter = useSelector((state) => state.counter.counter); 
+  const toggle = useSelector((state) => state.counter.visibility);
+
   const dispatch = useDispatch();
-  
+
   const toggleCounterHandler = () => {
-    dispatch({ type: "TOGGLE" });
+    //------- DEFAULT REDUX -------
+    // dispatch({ type: "TOGGLE" });
+
+    //-------REDUX TOOLKIT -------
+    dispatch(counterActions.toggle())
   };
 
   const incrementCounterHandler = () => {
-    dispatch({ type: "ADD" });
+    //------- DEFAULT REDUX -------
+    // dispatch({ type: "ADD" });
+
+    //-------REDUX TOOLKIT -------
+    dispatch(counterActions.add())
   };
 
   const decrementCounterHandler = () => {
-    dispatch({ type: "SUB" });
+    //------- DEFAULT REDUX -------
+    // dispatch({ type: "SUB" });
+
+    //-------REDUX TOOLKIT -------
+    dispatch(counterActions.sub())
   };
 
   const incrementBy5CounterHandler = () => {
-    dispatch({ type: "ADD-BY", amount: 5 });
+    //------- DEFAULT REDUX -------
+    // dispatch({ type: "ADD-BY", amount: 5 });
+
+    //-------REDUX TOOLKIT -------
+    dispatch(counterActions.addBy(5)) // { type: CONSTANT, payload: 5}
   };
 
   return (
