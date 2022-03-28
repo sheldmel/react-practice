@@ -1,27 +1,30 @@
 import MeetupList from "../components/meetups/MeetupList";
 
+import { MongoClient } from "mongodb";
 
-const DUMMY_MEETUPS = [
-  {
-    id: "m1",
-    title: "A First Meetup",
-    image:
-      "https://secure-content.meetupstatic.com/images/classic-events/497288721/676x380.webp",
-    address: "123 Abc street",
-    description: "This is the first meetup",
-  },
-  {
-    id: "m2",
-    title: "A Second Meetup",
-    image:
-      "https://media-cdn.tripadvisor.com/media/photo-s/0e/39/56/25/sky-gazer-meetup-place.jpg",
-    address: "112 xqw street",
-    description: "This is the second meetup",
-  },
-];
 
-const HomePage = () => {
-  return <MeetupList meetups={DUMMY_MEETUPS} />
+const HomePage = (props) => {
+  return <MeetupList meetups={props.meetups} />;
 };
+
+export const getStaticProps = async() => {
+    const client = await MongoClient.connect(`mongodb+srv://Shelton:test123@cluster0.qusgr.mongodb.net/meetups?retryWrites=true&w=majority`)
+    const db = client.db()
+    const meetups = db.collection('meetups');
+    const result = await meetups.find().toArray();
+    client.close();
+
+    return {
+        props: {
+            meetups: result.map(meetup => ({
+                title: meetup.title,
+                address: meetup.address,
+                image: meetup.image,
+                id: meetup._id.toString()
+            }))
+        },
+        revalidate: 1
+    }
+}
 
 export default HomePage;
